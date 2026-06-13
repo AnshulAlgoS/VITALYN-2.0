@@ -1,3 +1,10 @@
+import os
+# Configure Matplotlib before any other imports that might use it
+os.environ['MPLCONFIGDIR'] = '/tmp/matplotlib'
+# Disable Matplotlib's font cache building by using a non-interactive backend
+import matplotlib
+matplotlib.use('Agg')
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -5,7 +12,6 @@ from pydantic import BaseModel
 from typing import Optional
 import uvicorn
 import json
-import os
 import random
 import string
 from datetime import datetime, timedelta

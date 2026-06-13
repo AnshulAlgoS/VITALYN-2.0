@@ -1,8 +1,8 @@
 fastapi
-uvicorn
+uvicorn[standard]
 numpy
 pandas
-scikit-learn
+scikit-learn==1.8.0
 opencv-python-headless
 mediapipe
 librosa
