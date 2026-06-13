@@ -1,8 +1,20 @@
-# Backend folder (excluded as requested)
-backend/
+# Backend folder (exclude most, except specific files/folders)
+backend/*
+!backend/requirements.txt
+!backend/app/
+backend/app/models/*.pth
+backend/app/models/*.pkl
+backend/app/models/*.joblib
+backend/models/
 
-# Large audio sample folders
+# Large audio/data sample folders
 public/Actor_*/
+public/Closed_Eyes/
+public/Open_Eyes/
+public/audio_speech_actors_01-24/
+public/fer2013/
+public/mimic-iii-clinical-database-demo-1.4/
+bun.lockb
 
 # Dependencies
 node_modules/
