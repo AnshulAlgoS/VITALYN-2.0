@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: vitalyn-backend
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    rootDir: backend
+    autoDeploy: true
+    envVars:
+      - key: MPLCONFIGDIR
+        value: /tmp/matplotlib
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+    healthCheckPath: /
+    initialDeployTimeout: 300
+    autoDeploy: true
+
+  - type: web
+    name: vitalyn-frontend
+    env: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
+    rootDir: .
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production

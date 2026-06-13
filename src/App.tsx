@@ -12,6 +12,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PatientDashboard from "./pages/PatientDashboard";
 import Login from "./pages/Login";
+import HealthProfile from "./pages/HealthProfile";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/patient" element={<PatientDashboard />} />
+          <Route path="/health-profile" element={<HealthProfile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

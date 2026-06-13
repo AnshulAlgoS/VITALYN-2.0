@@ -5,8 +5,7 @@ import {
   Bell,
   Settings,
   Activity,
-  FileText,
-  ShieldAlert
+  FileText
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useEffect, useState } from "react";
@@ -29,7 +28,6 @@ const navItems = [
   { title: "Post-Op Monitoring", url: "/post-op", icon: HeartPulse },
   { title: "Risk Reports", url: "/reports", icon: FileText },
   { title: "Alerts", url: "/alerts", icon: Bell },
-  { title: "System Health", url: "/system", icon: ShieldAlert },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 

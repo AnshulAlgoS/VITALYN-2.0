@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, Stethoscope, User, ArrowRight, BrainCircuit, Clock, Zap } from "lucide-react";
+import { Activity, Stethoscope, User, Users, ArrowRight, BrainCircuit, Clock, Zap, QrCode, Shield, Mic, Scan } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import gsap from "gsap";
 
@@ -64,41 +64,77 @@ export default function Index() {
 
       const featureCards = gsap.utils.toArray<HTMLElement>(".feature-card");
       if (featureCards.length) {
-        gsap.fromTo(
-          featureCards,
-          { y: 40, opacity: 0, rotateX: 8 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 0.9,
-            delay: 0.35,
-            ease: "power3.out",
-            stagger: 0.12,
-          }
-        );
+        featureCards.forEach((card, cardIndex) => {
+          // Animate the entire card
+          gsap.fromTo(
+            card,
+            { y: 60, opacity: 0, rotateX: 10, scale: 0.95 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              scale: 1,
+              duration: 1,
+              delay: 0.4 + cardIndex * 0.2,
+              ease: "back.out(1.2)",
+            }
+          );
 
-        featureCards.forEach((card) => {
+          // Animate the icon with a bounce
+          const icon = card.querySelector<HTMLElement>(".w-20.h-20");
+          if (icon) {
+            gsap.fromTo(
+              icon,
+              { scale: 0, rotate: -30 },
+              {
+                scale: 1,
+                rotate: 0,
+                duration: 0.7,
+                delay: 0.7 + cardIndex * 0.2,
+                ease: "back.out(1.7)",
+              }
+            );
+          }
+
+          // Animate each detail with a staggered slide-in
+          const details = gsap.utils.toArray<HTMLElement>(card.querySelectorAll(".feature-detail"));
+          if (details.length) {
+            gsap.fromTo(
+              details,
+              { x: -30, opacity: 0, scale: 0.9 },
+              {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                delay: 0.9 + cardIndex * 0.2,
+                ease: "power2.out",
+                stagger: 0.1,
+              }
+            );
+          }
+
+          // 3D hover effects
           const el = card;
           const onMove = (event: MouseEvent) => {
             const rect = el.getBoundingClientRect();
             const relX = (event.clientX - rect.left) / rect.width - 0.5;
             const relY = (event.clientY - rect.top) / rect.height - 0.5;
             gsap.to(el, {
-              rotateY: relX * 20,
-              rotateX: -relY * 20,
-              translateZ: 26,
-              duration: 0.4,
+              rotateY: relX * 15,
+              rotateX: -relY * 15,
+              translateZ: 40,
+              duration: 0.3,
               ease: "power2.out",
-              boxShadow: "0 26px 70px rgba(6, 10, 40, 0.55)",
+              boxShadow: "0 30px 80px rgba(6, 10, 40, 0.6)",
             });
             const glow = el.querySelector<HTMLElement>(".feature-glow");
             if (glow) {
               gsap.to(glow, {
-                opacity: 0.25,
+                opacity: 0.35,
                 background:
-                  "radial-gradient(circle at 20% 0%, rgba(250,250,255,0.85), transparent 55%)",
-                duration: 0.4,
+                  "radial-gradient(circle at 30% 0%, rgba(250,250,255,0.9), transparent 60%)",
+                duration: 0.3,
                 ease: "power2.out",
               });
             }
@@ -108,15 +144,15 @@ export default function Index() {
               rotateX: 0,
               rotateY: 0,
               translateZ: 0,
-              duration: 0.6,
+              duration: 0.5,
               ease: "power3.out",
-              boxShadow: "0 20px 40px rgba(6, 10, 40, 0.35)",
+              boxShadow: "0 8px 8px 0 rgba(6, 10, 40, 0.35)",
             });
             const glow = el.querySelector<HTMLElement>(".feature-glow");
             if (glow) {
               gsap.to(glow, {
                 opacity: 0,
-                duration: 0.45,
+                duration: 0.4,
                 ease: "power2.out",
               });
             }
@@ -371,58 +407,340 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="relative z-10 py-24 sm:py-32 overflow-hidden">
+      <section className="relative z-10 py-24 sm:py-32 overflow-hidden bg-gradient-to-b from-[#fdfbf6] to-[#f1ede2]">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-[#111322] sm:text-4xl">
-              Features built around clinicians
+          <div className="mx-auto max-w-3xl text-center mb-16">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#f97373] bg-[#fee2e2]/80 px-4 py-2 mb-6">
+              <span className="text-sm font-bold text-[#111322]">The Problem We Solve</span>
+            </div>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#111322] sm:text-5xl">
+              The gap in post-op care
             </h2>
-            <p className="mt-4 text-lg leading-8 text-[#4b4f70]">
-              A comprehensive system that transforms raw data into lifesaving insights.
+            <p className="mt-6 text-xl leading-9 text-[#4b4f70]">
+              When patients go home after surgery, caretakers often feel completely helpless. Contact with doctors is minimal, and small issues can turn into big problems fast. <strong className="text-[#f97373]">Vitalyn fixes this.</strong>
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 perspective-[1600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322] p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-[#fee2e2] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                  <User className="h-8 w-8 text-[#f97373]" />
+                </div>
+                <h3 className="text-2xl font-black text-[#111322]">Patients</h3>
+              </div>
+              <p className="text-lg text-[#4b4f70] leading-relaxed font-medium">
+                Feel safe at home with continuous, gentle monitoring. No need to worry about when to call the doctor.
+              </p>
+            </Card>
+
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322] p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-[#f1ede2] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                  <Users className="h-8 w-8 text-[#3a3e61]" />
+                </div>
+                <h3 className="text-2xl font-black text-[#111322]">Caretakers</h3>
+              </div>
+              <p className="text-lg text-[#4b4f70] leading-relaxed font-medium">
+                Stop feeling helpless. Have direct access to clinicians and clear guidance on what to do.
+              </p>
+            </Card>
+
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322] p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-white border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                  <Stethoscope className="h-8 w-8 text-[#111322]" />
+                </div>
+                <h3 className="text-2xl font-black text-[#111322]">Clinicians</h3>
+              </div>
+              <p className="text-lg text-[#4b4f70] leading-relaxed font-medium">
+                Stay connected to patients at home. Get prioritized alerts and never miss a critical change.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 py-24 sm:py-32 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+          <div className="mx-auto max-w-2xl text-center mb-16">
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#111322] sm:text-5xl">
+              How Vitalyn saves lives
+            </h2>
+            <p className="mt-4 text-xl leading-8 text-[#4b4f70]">
+              Simple, powerful tools that keep patients safe and clinicians focused.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-1 perspective-[2000px]">
             {[
               {
                 title: "Multimodal Fusion",
-                desc: "Combines wearable vitals, facial micro-expressions, and voice stress analysis for 360° patient monitoring.",
+                desc: "Watches vitals, face, and voice together for a complete picture of health.",
+                details: [
+                  "Combines 7+ data points: heart rate, blood pressure, oxygen, temperature, pain, facial tiredness, and voice stress",
+                  "AI connects changes across all these — things single-signal tools never catch",
+                  "No wires, no discomfort — just continuous, gentle monitoring",
+                  "Works perfectly in noisy hospitals or quiet homes"
+                ],
                 icon: Activity,
-                color: "text-[#3a3e61]",
-                bg: "bg-[#f1ede2]/80",
+                color: "text-[#f97373]",
+                bg: "bg-[#fee2e2]/80",
+                accent: "bg-[#f97373]"
               },
               {
                 title: "Predictive TTR Engine",
-                desc: "Proprietary Time-to-Risk algorithms forecast deterioration hours before clinical symptoms appear.",
+                desc: "Alerts clinicians hours before problems become visible symptoms.",
+                details: [
+                  "Learned from thousands of real patient journeys to spot early warning signs",
+                  "Updates risk every 5-15 minutes and tells you exactly when to check in",
+                  "Colors-code risk: green (stable) → yellow (monitor) → orange (urgent) → red (critical)",
+                  "Writes helpful notes for doctors so they don't have to"
+                ],
                 icon: Clock,
                 color: "text-[#3a3e61]",
                 bg: "bg-[#f1ede2]/80",
+                accent: "bg-[#3a3e61]"
               },
               {
                 title: "Smart Queue Optimization",
-                desc: "Dynamic hospital resource allocation based on medical urgency rather than first-come-first-serve.",
+                desc: "Makes sure the sickest patients are seen first, every time.",
+                details: [
+                  "Automatically reorders waiting patients as new risk data comes in",
+                  "Balances medical urgency with how long someone has been waiting",
+                  "Shows clinicians exactly why each patient is prioritized",
+                  "Helps hospitals plan staffing for busy times"
+                ],
                 icon: Zap,
-                color: "text-[#3a3e61]",
-                bg: "bg-[#f1ede2]/80",
+                color: "text-[#111322]",
+                bg: "bg-[#ffffff]/80",
+                accent: "bg-[#111322]"
               },
-            ].map((feature) => (
+            ].map((feature, index) => (
               <Card
                 key={feature.title}
-                className="feature-card relative bg-[#fdfbf6] border-[2px] border-[#111322] rounded-xl shadow-[4px_4px_0_0_#111322] transition-all duration-500 hover:-translate-y-2"
+                className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322] transition-all duration-500 hover:-translate-y-4"
                 style={{ transformStyle: "preserve-3d", transformOrigin: "center center" }}
               >
-                <CardHeader className="relative overflow-hidden">
+                <CardHeader className="relative overflow-hidden p-8 pb-4">
                   <div className="pointer-events-none absolute inset-0 opacity-0 feature-glow" />
-                  <div className={`w-11 h-11 rounded-md flex items-center justify-center mb-4 border-[2px] border-[#111322] shadow-[3px_3px_0_0_#111322] ${feature.bg} ${feature.color}`}>
-                    <feature.icon className="h-5 w-5" />
+                  <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 border-[3px] border-[#111322] shadow-[5px_5px_0_0_#111322] ${feature.bg} ${feature.color}`}>
+                    <feature.icon className="h-10 w-10" />
                   </div>
-                  <CardTitle className="text-[#3a3e61]">{feature.title}</CardTitle>
-                  <CardDescription className="text-[#3a3e61]/80 mt-2">
+                  <CardTitle className="text-3xl font-black text-[#111322]">{feature.title}</CardTitle>
+                  <CardDescription className="text-[#4b4f70] mt-4 text-xl leading-relaxed font-medium">
                     {feature.desc}
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="px-8 pb-8 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    {feature.details.map((detail, i) => (
+                      <div key={i} className="feature-detail flex gap-4 items-start bg-white p-5 rounded-2xl border-2 border-[#e1d8c7] shadow-sm">
+                        <div className={`mt-1 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${feature.accent}`}>
+                          <span className="text-white font-bold text-sm">{i + 1}</span>
+                        </div>
+                        <p className="text-base text-[#111322] leading-relaxed font-medium">{detail}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 py-24 sm:py-32 overflow-hidden bg-gradient-to-b from-[#f1ede2] to-[#fdfbf6]">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+          <div className="mx-auto max-w-2xl text-center mb-16">
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#111322] sm:text-5xl">
+              Deep Dive: The Technology
+            </h2>
+            <p className="mt-4 text-xl leading-8 text-[#4b4f70]">
+              Cutting-edge AI powered by three specialized models and a giant LLM brain.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+              <CardHeader className="p-8 pb-4">
+                <div className="w-20 h-20 rounded-2xl bg-[#fdf8e5] border-[3px] border-[#111322] shadow-[5px_5px_0_0_#111322] flex items-center justify-center mb-6">
+                  <BrainCircuit className="h-10 w-10 text-[#d4a72c]" />
+                </div>
+                <CardTitle className="text-3xl font-black text-[#111322]">
+                  70 Billion Parameter LLM
+                </CardTitle>
+                <CardDescription className="text-[#4b4f70] mt-4 text-xl leading-relaxed font-medium">
+                  The big brain that analyzes everything and generates clinical insights.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 pt-0">
+                <div className="space-y-4">
+                  <div className="flex gap-4 items-start bg-white p-5 rounded-2xl border-2 border-[#e1d8c7]">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-[#d4a72c] flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-sm">1</span>
+                    </div>
+                    <p className="text-base text-[#111322] leading-relaxed font-medium">
+                      Takes all the data from vitals, face, and voice and connects the dots
+                    </p>
+                  </div>
+                  <div className="flex gap-4 items-start bg-white p-5 rounded-2xl border-2 border-[#e1d8c7]">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-[#d4a72c] flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-sm">2</span>
+                    </div>
+                    <p className="text-base text-[#111322] leading-relaxed font-medium">
+                      Generates SOAP notes and detailed clinical analysis automatically
+                    </p>
+                  </div>
+                  <div className="flex gap-4 items-start bg-white p-5 rounded-2xl border-2 border-[#e1d8c7]">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-[#d4a72c] flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-sm">3</span>
+                    </div>
+                    <p className="text-base text-[#111322] leading-relaxed font-medium">
+                      Prioritizes what clinicians need to see first
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-8">
+              <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-[#fee2e2] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                      <Activity className="h-8 w-8 text-[#f97373]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111322]">Vitals Model</CardTitle>
+                      <CardDescription className="text-[#4b4f70] mt-2 text-lg font-medium">
+                        Trained on real patient data
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8 pt-0">
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    Analyzes heart rate, blood pressure, oxygen, temperature, and more to detect early signs of issues.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-[#e1d8c7] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                      <Scan className="h-8 w-8 text-[#3a3e61]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111322]">Face Model</CardTitle>
+                      <CardDescription className="text-[#4b4f70] mt-2 text-lg font-medium">
+                        Reads micro-expressions
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8 pt-0">
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    Detects fatigue, pain, and stress from facial expressions and eye movements.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+                <CardHeader className="p-8 pb-4">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-white border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                      <Mic className="h-8 w-8 text-[#111322]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl font-black text-[#111322]">Voice Model</CardTitle>
+                      <CardDescription className="text-[#4b4f70] mt-2 text-lg font-medium">
+                        Analyzes speech patterns
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8 pt-0">
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    Picks up on subtle changes in voice that indicate stress, pain, or deterioration.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 py-24 sm:py-32 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+          <div className="mx-auto max-w-2xl text-center mb-16">
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#111322] sm:text-5xl">
+              Key Features
+            </h2>
+            <p className="mt-4 text-xl leading-8 text-[#4b4f70]">
+              Everything you need for complete post-op care management.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+              <CardHeader className="p-8 pb-4">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-[#fee2e2] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                    <QrCode className="h-8 w-8 text-[#f97373]" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-black text-[#111322]">Health QR Code</CardTitle>
+                    <CardDescription className="text-[#4b4f70] mt-2 text-lg font-medium">
+                      Your digital health identity
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 pt-0">
+                <div className="space-y-3">
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Instant access:</strong> In emergencies, first responders can scan the QR code to get critical info
+                  </p>
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Complete profile:</strong> Shows allergies, medications, blood type, and medical history
+                  </p>
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Shareable:</strong> Easily share emergency access with family or caregivers
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="feature-card relative bg-[#fdfbf6] border-[3px] border-[#111322] rounded-[32px] shadow-[8px_8px_0_0_#111322]">
+              <CardHeader className="p-8 pb-4">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-[#f1ede2] border-[3px] border-[#111322] shadow-[4px_4px_0_0_#111322] flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-[#3a3e61]" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-black text-[#111322]">Insurance Documents</CardTitle>
+                    <CardDescription className="text-[#4b4f70] mt-2 text-lg font-medium">
+                      All in one secure place
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 pt-0">
+                <div className="space-y-3">
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Organized:</strong> Store and access all insurance documents digitally
+                  </p>
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Share with providers:</strong> Send to hospitals or clinics instantly
+                  </p>
+                  <p className="text-base text-[#4b4f70] leading-relaxed">
+                    • <strong className="text-[#111322]">Always available:</strong> Never lose important paperwork again
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
